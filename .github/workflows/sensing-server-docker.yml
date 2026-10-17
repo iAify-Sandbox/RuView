@@ -46,7 +46,6 @@ concurrency:
 
 jobs:
   build-and-publish:
-    if: github.repository_owner == 'ruvnet'
     name: build · push · smoke-test
     runs-on: ubuntu-latest
     steps:
