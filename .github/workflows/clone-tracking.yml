@@ -32,6 +32,7 @@ concurrency:
 
 jobs:
   snapshot:
+    if: github.repository_owner == 'ruvnet'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
