@@ -17,7 +17,6 @@ jobs:
   # Rust dependency advisories are deterministic for the checked-in lockfile,
   # so this job gates the PR and retains the exact machine-readable report.
   rust-audit:
-    if: github.repository_owner == 'ruvnet'
     name: Rust Dependency Audit
     runs-on: ubuntu-latest
     permissions:
@@ -44,7 +43,6 @@ jobs:
 
   # Static Application Security Testing (SAST)
   sast:
-    if: github.repository_owner == 'ruvnet'
     name: Static Application Security Testing
     runs-on: ubuntu-latest
     continue-on-error: true   # third-party scanners are flaky / SARIF uploads can 403; don't gate the PR
@@ -122,7 +120,6 @@ jobs:
 
   # Dependency vulnerability scanning
   dependency-scan:
-    if: github.repository_owner == 'ruvnet'
     name: Dependency Vulnerability Scan
     runs-on: ubuntu-latest
     continue-on-error: true   # third-party scanners are flaky / SARIF uploads can 403; don't gate the PR
@@ -191,7 +188,7 @@ jobs:
     name: Container Security Scan
     runs-on: ubuntu-latest
     continue-on-error: true   # third-party scanners are flaky / SARIF uploads can 403; don't gate the PR
-    if: ${{ github.repository_owner == 'ruvnet' && (github.event_name == 'push' || github.event_name == 'schedule') }}
+    if: github.event_name == 'push' || github.event_name == 'schedule'
     permissions:
       security-events: write
       actions: read
@@ -243,7 +240,6 @@ jobs:
 
   # Infrastructure as Code security scanning
   iac-scan:
-    if: github.repository_owner == 'ruvnet'
     name: Infrastructure Security Scan
     runs-on: ubuntu-latest
     continue-on-error: true   # third-party scanners are flaky / SARIF uploads can 403; don't gate the PR
@@ -280,7 +276,6 @@ jobs:
 
   # Secret scanning
   secret-scan:
-    if: github.repository_owner == 'ruvnet'
     name: Secret Scanning
     runs-on: ubuntu-latest
     continue-on-error: true   # third-party scanners are flaky / SARIF uploads can 403; don't gate the PR
@@ -320,7 +315,6 @@ jobs:
 
   # License compliance scanning
   license-scan:
-    if: github.repository_owner == 'ruvnet'
     name: License Compliance Scan
     runs-on: ubuntu-latest
     continue-on-error: true   # third-party scanners are flaky / SARIF uploads can 403; don't gate the PR
@@ -358,7 +352,6 @@ jobs:
 
   # Security policy compliance
   compliance-check:
-    if: github.repository_owner == 'ruvnet'
     name: Security Policy Compliance
     runs-on: ubuntu-latest
     continue-on-error: true   # third-party scanners are flaky / SARIF uploads can 403; don't gate the PR
@@ -411,7 +404,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true   # third-party scanners are flaky / SARIF uploads can 403; don't gate the PR
     needs: [sast, dependency-scan, container-scan, iac-scan, secret-scan, license-scan, compliance-check]
-    if: ${{ github.repository_owner == 'ruvnet' && (always()) }}
+    if: always()
     # Promote secret to env-scope so the gating `if:` on the Slack-notify
     # step below is parseable (GitHub Actions rejects `secrets.X` in
     # step-level `if:` expressions).

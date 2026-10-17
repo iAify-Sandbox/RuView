@@ -25,7 +25,6 @@ permissions:
 
 jobs:
   verify:
-    if: github.repository_owner == 'ruvnet'
     name: Safe and reproducible README visuals
     runs-on: ubuntu-latest
     steps:
